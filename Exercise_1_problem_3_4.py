@@ -13,8 +13,8 @@
 import pandas as pd 
 
 #Check how many rows and columns there are:
+ #read txt file
 data = pd.read_table("data/travelTimes_2015_Helsinki.txt", sep=";",)
-data = data[['from_x','from_y', 'to_x', 'to_y', 'total_route_time',]]
 
 # CODE FOR TESTING YOUR SOLUTION
 
@@ -26,7 +26,8 @@ print(data.head())
 # 
 
 # YOUR CODE HERE 2 to set `data`
-
+ #select the 4 line
+data = data[['from_x','from_y', 'to_x', 'to_y']]
 # CODE FOR TESTING YOUR SOLUTION
 print(list(data.columns))
 
@@ -37,12 +38,7 @@ print(list(data.columns))
 # YOUR CODE HERE 3 to define empty lists orig_points and dest_points
 orig_points = []
 dest_points = []
-from shapely.geometry import Point
-for index, row in data.iterrows():
-    orig = Point(row['from_x'], row['from_y'])
-    dest = Point(row['to_x'], row['to_y'])
-    orig_points.append(orig)
-    dest_points.append(dest)
+
 # CODE FOR TESTING YOUR SOLUTION
 
 # List length should be zero at this point:
@@ -76,7 +72,13 @@ print('dest_points length:', len(dest_points))
 
 # YOUR CODE HERE 4 to append points in orig_points and dest_points
 from shapely.geometry import Point
-
+for index, row in data.iterrows():
+  #define the Points
+  orig = Point(row['from_x'], row['from_y'])
+  dest = Point(row['to_x'], row['to_y'])
+  #append here
+  orig_points.append(orig)
+  dest_points.append(dest)
 # CODE FOR TESTING YOUR SOLUTION
 
 # This test print should print out the first origin and destination coordinates in the two lists:
@@ -104,9 +106,6 @@ assert len(dest_points) == len(data), "Number of destination points must be the 
 # YOUR CODE HERE 5
 from shapely.geometry import LineString
 lines = []
-for orig, dest in zip(orig_points, dest_points):
-    line = LineString([orig, dest])
-    lines.append(line)
 
 # CODE FOR TESTING YOUR SOLUTION
 
@@ -125,8 +124,10 @@ print('lines length:', len(lines))
 
 # YOUR CODE HERE 6 to append LineString to lines
 #raise NotImplementedError()
-from shapely.geometry import LineString
-
+for orig, dest in zip(orig_points, dest_points):
+  #connect these two points
+  line = LineString([orig, dest])
+  lines.append(line)
 # CODE FOR TESTING YOUR SOLUTION
 
 #Test that the list has correct number of LineStrings
@@ -158,8 +159,19 @@ print("Total length of all lines is", round(total_length, 2))
 # **Note: avoid using the same variable names as earlier inside your functions!** Functions are often defined at the top of the script file (or jupyter notebook), and now that we have them here at the very end you might accidentally alter an existing variable inside your functions. To avoid this, alter the variable names inside your own functions if you re-use code from this notebook. 
 
 # YOUR CODE HERE 8 to define create_od_lines() and calculate_total_distance()
+def create_od_lines(orig_points,dest_points):
+  """this function returns od_lines"""
+  lines=[]
+  for poi in range(len(orig_points)):
+    lines.append(LineString([orig_points[poi],dest_points[poi]]))
+  return lines
 
-
+def calculate_total_distance(od_lines):
+  """this function returns total_distance"""
+  total_distance=0
+  for i in od_lines:
+    total_distance+=i.length
+  return total_length
 # CODE FOR TESTING YOUR SOLUTION
 
 # Use the functions

@@ -11,6 +11,7 @@
 
 from shapely.geometry import Point, LineString, Polygon
 #YOUR CODE HERE 1 to define create_point_geom()
+ #create a function to make Point
 def create_point_geom(x,y):
   return(Point(x,y))
 # Test your function by running these code cells:
@@ -28,11 +29,16 @@ print(point1.geom_type)
 # 
 
 # YOUR CODE HERE 2 to define create_line_geom()
+ #create a function to make line
 def create_line_geom(points):
+     #if points is not list, assert
     assert type(points)=="list", "Input should be a list!"
+     #if points has 1 parameter, assert
     assert len(points)>=2, "LineString object requires at least two Points!"
+     #if points has non-Shapely points, assert
     for point in points:
       assert type(point)=="shapely.geometry.point.Point","All list values should be Shapely Point objects!"
+      # make a LineString
     line = LineString([points[0], points[1]])
     return line
 # Demonstrate the usage of y"Input should be a list!"our function; For example, create a line object with two points: `Point(45.2, 22.34)` & `Point(100.22, -3.20)` and store the result in a variable called `line1`:
@@ -71,16 +77,22 @@ except Exception as e:
 
 
 # YOUR CODE HERE 4 to define create_poly_geom()
+ # create a function to make poly
 def create_poly_geom(x):
+     # if x isn't list, assert
     assert type(x) is list, "Input should be a list!"
+     #if x has less than 3 paramaers, assert
     assert len(x)>=3, "Polygon object requires at least three Points!"
+     #Checked all list values area coordinate tuples or not.
     for i in x:
         assert type(i) is tuple, "All list values should be coordinate tuples!"
+     #create Polygon
     poly = Polygon(x)
     return poly
 # Demonstrate the usage of the function. For example, create a Polygon with three points: `(45.2, 22.34)`, `(100.22, -3.20)` & `(70.0, 10.20)`.
 
 # YOUR CODE HERE 5 to define poly1 with three points
+ #demonstrate the usage of "craete_poly_geom()"
 poly1 = LineString([(45.2, 22.34),(100.22, -3.20),(70.0, 10.20)]) 
 
 # CODE FOR TESTING YOUR SOLUTION

@@ -13,7 +13,8 @@
 import pandas as pd 
 
 #Check how many rows and columns there are:
-data
+data = pd.read_table("data/travelTimes_2015_Helsinki.txt", sep=";",)
+data = data[['from_x','from_y', 'to_x', 'to_y', 'total_route_time',]]
 
 # CODE FOR TESTING YOUR SOLUTION
 
@@ -34,7 +35,14 @@ print(list(data.columns))
 # 
 
 # YOUR CODE HERE 3 to define empty lists orig_points and dest_points
-
+orig_points = []
+dest_points = []
+from shapely.geometry import Point
+for index, row in data.iterrows():
+    orig = Point(row['from_x'], row['from_y'])
+    dest = Point(row['to_x'], row['to_y'])
+    orig_points.append(orig)
+    dest_points.append(dest)
 # CODE FOR TESTING YOUR SOLUTION
 
 # List length should be zero at this point:
@@ -94,7 +102,11 @@ assert len(dest_points) == len(data), "Number of destination points must be the 
 # 
 
 # YOUR CODE HERE 5
-
+from shapely.geometry import LineString
+lines = []
+for orig, dest in zip(orig_points, dest_points):
+    line = LineString([orig, dest])
+    lines.append(line)
 
 # CODE FOR TESTING YOUR SOLUTION
 
@@ -127,7 +139,9 @@ assert len(lines) == len(data), "There should be as many lines as there are rows
 # 
 
 # YOUR CODE HERE 7 to find total length
-
+total_length = 0
+for line in lines:
+    total_length += line.length
 # CODE FOR TESTING YOUR SOLUTION
 
 # This test print should print the total length of all lines

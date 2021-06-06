@@ -11,8 +11,8 @@
 
 from shapely.geometry import Point, LineString, Polygon
 #YOUR CODE HERE 1 to define create_point_geom()
- #create a function to make Point
 def create_point_geom(x,y):
+  """this function will return a point"""
   return(Point(x,y))
 # Test your function by running these code cells:
 
@@ -29,15 +29,16 @@ print(point1.geom_type)
 # 
 
 # YOUR CODE HERE 2 to define create_line_geom()
- #create a function to make line
 def create_line_geom(points):
+    """this function will return a line"""
+#create a function to make line
      #if points is not list, assert
     assert type(points)=="list", "Input should be a list!"
      #if points has 1 parameter, assert
     assert len(points)>=2, "LineString object requires at least two Points!"
      #if points has non-Shapely points, assert
     for point in points:
-      assert type(point)=="shapely.geometry.point.Point","All list values should be Shapely Point objects!"
+      assert type(point)=="shapely","All list values should be Shapely Point objects!"
       # make a LineString
     line = LineString([points[0], points[1]])
     return line
@@ -78,16 +79,17 @@ except Exception as e:
 
 # YOUR CODE HERE 4 to define create_poly_geom()
  # create a function to make poly
-def create_poly_geom(x):
-     # if x isn't list, assert
-    assert type(x) is list, "Input should be a list!"
-     #if x has less than 3 paramaers, assert
-    assert len(x)>=3, "Polygon object requires at least three Points!"
+def create_poly_geom(coords):
+    """this function will return a Polygon"""
+     # if coords isn't list, assert
+    assert type(coords) is list, "Input should be a list!"
+     #if coords has less than 3 paramaers, assert
+    assert len(coords)>=3, "Polygon object requires at least three Points!"
      #Checked all list values area coordinate tuples or not.
-    for i in x:
+    for i in coords:
         assert type(i) is tuple, "All list values should be coordinate tuples!"
      #create Polygon
-    poly = Polygon(x)
+    poly = Polygon(coords)
     return poly
 # Demonstrate the usage of the function. For example, create a Polygon with three points: `(45.2, 22.34)`, `(100.22, -3.20)` & `(70.0, 10.20)`.
 
@@ -124,12 +126,19 @@ except Exception as e:
 # 
 
 #  YOUR CODE HERE 6 to define get_centroid()
-
+ #create a function to found centroid
+def get_centroid(geom):
+  """this function will return a centroid"""
+  assert type(geom) in (Point,LineString,Polygon),"Input should be a Shapely geometry!"
+  return geom.centroid
 # Test and demonstrate the usage of the function. You can, for example, create shapely objects using the functions you created in problem 1 and print out information about their centroids:
 # 
 
 #  YOUR CODE HERE 7 to define some objects
-
+#make a border line
+border = [(-180, 90), (-180, -90), (180, -90), (180, 90)]
+world = Polygon(shell=border)
+poly1 =world
 
 # CODE FOR TESTING YOUR SOLUTION
 centroid = get_centroid(poly1)
@@ -151,7 +160,11 @@ except Exception as e:
 #    - Inside the function, you should first check with `assert` -functionality that the input is a Shapely Polygon geometry (see [lesson 6](https://geo-python.github.io/site/lessons/L6/interpreting-errors.html#assertions) and [hints](https://automating-gis-processes.github.io/site/develop/lessons/L1/exercise-1.html#hints)). If something else than a list is passed for the function, you should return an Error message: `"Input should be a Shapely Polygon -object!"`
 
 # YOUR CODE HERE 8 to define get_area()
-
+ #create a function to calculate area
+def get_area(poly):
+  """this function will return area"""
+  assert type(poly) == Polygon,"Input should be a Shapely geometry!"
+  return poly.area
 # Test and demonstrate the usage of the function:
 get_area(poly1)
 
@@ -176,7 +189,12 @@ except Exception as e:
 
 
 #  YOUR CODE HERE 9 to define get_length()
-
+def get_length(geom):
+    """this function will return length"""
+    if geom.geom_type == 'LineString':
+        return geom.length
+    elif geom.geom_type == 'Polygon':
+        return geom.exterior.length
 # Test and demonstrate the usage of the function:
 
 get_length(poly1)
